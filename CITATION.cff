@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the article below."
+title: "fsphysics: feature selection and interpretation for descriptor datasets"
+version: 1.0.0
+license: MIT
+type: software
+repository-code: "https://github.com/ClancyLab/Polymer_Feature"
+authors:
+  - family-names: "Curran"
+    given-names: "Maurice"
+    affiliation: "Johns Hopkins University"
+preferred-citation:
+  type: article
+  title: >-
+    What Does Feature Selection Say About Your Physics? An Interpretability
+    Analysis of Polymer Solvation Descriptors
+  journal: "Digital Discovery"
+  status: submitted
+  authors:
+    - family-names: "Curran"
+      given-names: "Maurice"
+    - family-names: "Mastracco"
+      given-names: "Peter"
+    - family-names: "Feng"
+      given-names: "Yuqi"
+    - family-names: "Katz"
+      given-names: "Howard E."
+    - family-names: "Clancy"
+      given-names: "Paulette"

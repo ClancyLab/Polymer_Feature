@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fsphysics"
+version = "1.0.0"
+description = "Feature selection and interpretation for descriptor-based materials datasets"
+readme = "README.txt"
+license = "MIT"
+license-files = ["LICENSE", "src/fsphysics/_vendor/LICENSE_BorutaShap.txt"]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "scikit-learn>=1.3",
+    # shap reads models from XGBoost 3.1 on only from shap 0.50, which needs
+    # Python 3.11; on Python 3.10 (last shap: 0.49.1) XGBoost stays below 3.1.
+    "xgboost>=1.7,<3.1; python_version < '3.11'",
+    "xgboost>=1.7; python_version >= '3.11'",
+    "shap>=0.42; python_version < '3.11'",
+    "shap>=0.50; python_version >= '3.11'",
+    "matplotlib>=3.7",
+    "openpyxl",
+    "pyyaml",
+    # needed by the vendored BorutaShap
+    "statsmodels",
+    "seaborn",
+    "tqdm",
+]
+
+[project.optional-dependencies]
+# drawing the mechanism stage's surrogate trees (also needs Graphviz)
+trees = ["dtreeviz"]
+
+[project.urls]
+Repository = "https://github.com/ClancyLab/Polymer_Feature"
+
+[project.scripts]
+fsphysics = "fsphysics.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fsphysics = ["_vendor/LICENSE_BorutaShap.txt"]

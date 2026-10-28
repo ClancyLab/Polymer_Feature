@@ -1,0 +1,145 @@
+# Reproduces the polymer solvation paper. Every setting not listed here
+# is at its default, which is the paper's frozen protocol. The exception is
+# tuning: it is on by default and off here, since the paper used the models
+# section's fixed settings. Run it from the repository's top folder:
+#     fsphysics run configs/polymer_solvation_paper.yaml
+run_name: polymer_solvation_paper
+
+data:
+  file: data/combined_svp_ml_input.xlsx
+  target: Total_eV
+  target_label: Solvation energy
+  target_unit: eV
+  unit_conversions: {kcal_mol: 23.0605}
+
+histograms:                     # histogram_polymer_analysis_part4.py, on every descriptor
+  custom_bins:                  # part4's CUSTOM_BINS; the other descriptors get dense bins
+    Polymer-orca-isotropic-quadrupole:      # top edge -145.9 (not -146): the polymer at -145.96 is in
+      edges: [-.inf, -350, -333, -316, -299, -282, -265, -248, -231, -214, -197, -180, -163, -145.9]
+      decimals: 0
+    Polymer-orca-isotropic-polarizability:  # first edge 574.79 (not 574.8): the smallest polymer is in
+      edges: [574.79, 668.6, 762.3, 856.1, 949.9, 1043.6, 1137.4, 1231.2, 1324.9, 1418.7, 1512.5,
+              1606.2, 1700, .inf]
+      decimals: 1
+    Polymer-solvent-accessible-surface-area:
+      edges: [520.2, 581.1, 641.9, 702.7, 763.5, 824.3, 885.1, 945.9, 1006.7, 1067.6, 1128.4,
+              1189.2, 1250, .inf]
+      decimals: 1
+    Polymer-multiwfn-%polar-surface-area:
+      edges: [10.7, 14.6, 18.5, 22.5, 26.4, 30.3, 34.2, 38.1, 42.1, 46, 49.9, 53.8, 57.7, 61.7]
+      decimals: 1
+    Solvent-multiwfn-ESP-max:               # last edge 41.63 (not 41.6): the solvent at 41.62 is in
+      edges: [7.1, 9.8, 12.4, 15.1, 17.7, 20.4, 23, 25.7, 28.3, 31, 33.7, 36.3, 39, 41.63]
+      decimals: 1
+    Polymer-chemical-hardness:              # open "< 0.90" bin: the 26 low-gap polymers
+      edges: [-.inf, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20, 1.25, 1.30, 1.35, 1.40, 1.45, 1.501]
+      decimals: 2
+    Solvent-Mulliken-electronegativity:     # 26 solvent values, no long tail: 13 closed bins
+      edges: [2.47, 2.65, 2.82, 3.00, 3.18, 3.35, 3.53, 3.71, 3.88, 4.06, 4.24, 4.42, 4.59, 4.77]
+      decimals: 2
+  class_edges: [-5.0, -4.5, -4.0, -3.5, -3.0, -2.5, -2.0, -1.5, -1.0]   # the scripts' ten ranges
+  class_labels: ["0 to -1", "-1 to -1.5", "-1.5 to -2", "-2 to -2.5", "-2.5 to -3",
+                 "-3 to -3.5", "-3.5 to -4", "-4 to -4.5", "-4.5 to -5", "< -5"]
+  file_names:                   # the scripts' sheet and figure names
+    Polymer-orca-isotropic-quadrupole: Quadrupole
+    Polymer-orca-isotropic-polarizability: Polarizability
+    Polymer-solvent-accessible-surface-area: SASA
+    Polymer-multiwfn-%polar-surface-area: PolarSA
+    Solvent-multiwfn-ESP-max: ESPmax
+    Polymer-chemical-hardness: Hardness
+    Solvent-Mulliken-electronegativity: SolvElectroneg
+  figure:
+    legend_title: Solvation Energy Range (eV)
+    axis_labels:
+      Polymer-orca-isotropic-quadrupole: Polymer Quadrupole (a.u.)
+      Polymer-orca-isotropic-polarizability: Polymer Polarizability (a.u.)
+      Polymer-solvent-accessible-surface-area: 'Polymer-Solvent Accessible Surface Area ($\AA^2$)'
+      Polymer-multiwfn-%polar-surface-area: Polymer Polar Surface Area Percentage (%)
+      Solvent-multiwfn-ESP-max: Solvent ESP Max (a.u.)
+      Polymer-chemical-hardness: Polymer Chemical Hardness (eV)
+      Solvent-Mulliken-electronegativity: Solvent Mulliken Electronegativity (eV)
+
+tuning:
+  models: []                    # no search: the models section's settings, as in the paper
+
+threshold_sweep:
+  cut_label: original cut       # SI figure wording for the 3-descriptor mean-gain cut
+
+labels:
+  blocks: {"Polymer-": "P", "Solvent-": "S"}
+  short_names:
+    Polymer-orca-isotropic-quadrupole: "P: quadrupole"
+    Polymer-orca-isotropic-polarizability: "P: polarizability"
+    Polymer-solvent-accessible-surface-area: "P: SASA"
+    Polymer-multiwfn-%polar-surface-area: "P: %polar area"
+    Polymer-multiwfn-ESP-max: "P: ESP-max"
+    Polymer-multiwfn-ESP-min: "P: ESP-min"
+    Polymer-multiwfn-polarity-index: "P: polarity index"
+    Polymer-Mulliken-electronegativity: "P: electronegativity"
+    Polymer-chemical-hardness: "P: hardness"
+    Polymer-hydrogen-bond-acceptor-number: "P: HBA count"
+    Polymer-hydrogen-bond-donor-number: "P: HBD count"
+    Solvent-orca-isotropic-quadrupole: "S: quadrupole"
+    Solvent-orca-isotropic-polarizability: "S: polarizability"
+    Solvent-multiwfn-%polar-surface-area: "S: %polar area"
+    Solvent-multiwfn-ESP-max: "S: ESP-max"
+    Solvent-multiwfn-ESP-min: "S: ESP-min"
+    Solvent-multiwfn-polarity-index: "S: polarity index"
+    Solvent-Mulliken-electronegativity: "S: electronegativity"
+    Solvent-chemical-hardness: "S: hardness"
+    Solvent-hydrogen-bond-acceptor-number: "S: HBA count"
+    Solvent-hydrogen-bond-donor-number: "S: HBD count"
+  family_names:                 # keyed by a member descriptor of each family (F1-F11 at 0.7)
+    Polymer-multiwfn-polarity-index: Polymer charge distribution
+    Solvent-multiwfn-polarity-index: Solvent charge distribution
+    Polymer-orca-isotropic-polarizability: Polymer size effects
+    Solvent-orca-isotropic-polarizability: Solvent size effects
+    Polymer-chemical-hardness: Polymer hardness
+    Polymer-hydrogen-bond-acceptor-number: Polymer H-bond acceptor
+    Polymer-hydrogen-bond-donor-number: Polymer H-bond donor
+    Solvent-Mulliken-electronegativity: Solvent electronegativity
+    Solvent-chemical-hardness: Solvent hardness
+    Solvent-hydrogen-bond-donor-number: Solvent H-bond donor
+    Solvent-multiwfn-ESP-max: Solvent ESP-max
+
+families:
+  dendrogram:
+    branch_labels:              # each family named by one member descriptor
+      - text: Solvent
+        kind: block
+        families: [Solvent-multiwfn-polarity-index, Solvent-orca-isotropic-polarizability,
+                   Solvent-Mulliken-electronegativity, Solvent-chemical-hardness,
+                   Solvent-hydrogen-bond-donor-number, Solvent-multiwfn-ESP-max]
+      - text: Polymer
+        kind: block
+        families: [Polymer-multiwfn-polarity-index, Polymer-orca-isotropic-polarizability,
+                   Polymer-chemical-hardness, Polymer-hydrogen-bond-acceptor-number,
+                   Polymer-hydrogen-bond-donor-number]
+      - text: "Charge\nDistribution"
+        families: [Solvent-multiwfn-polarity-index, Solvent-multiwfn-ESP-max]
+      - text: "Size\nEffects"
+        families: [Solvent-orca-isotropic-polarizability, Solvent-chemical-hardness,
+                   Solvent-hydrogen-bond-donor-number]
+      - text: "Size\nEffects"
+        families: [Polymer-orca-isotropic-polarizability, Polymer-chemical-hardness]
+      - text: "Charge\nDistribution"
+        families: [Polymer-multiwfn-polarity-index, Polymer-hydrogen-bond-acceptor-number]
+
+mechanism:
+  key_features: [Polymer-orca-isotropic-quadrupole, Solvent-multiwfn-ESP-max,
+                 Solvent-Mulliken-electronegativity, Polymer-chemical-hardness,
+                 Solvent-hydrogen-bond-donor-number, Polymer-orca-isotropic-polarizability,
+                 Polymer-solvent-accessible-surface-area, Polymer-multiwfn-%polar-surface-area]
+  pair_plots:                   # the strongest pairs of each type, plus the hardness question
+    - [Polymer-orca-isotropic-quadrupole, Solvent-Mulliken-electronegativity]
+    - [Polymer-orca-isotropic-quadrupole, Polymer-orca-isotropic-polarizability]
+    - [Polymer-orca-isotropic-polarizability, Solvent-Mulliken-electronegativity]
+    - [Solvent-orca-isotropic-quadrupole, Solvent-Mulliken-electronegativity]
+    - [Solvent-multiwfn-ESP-min, Solvent-multiwfn-ESP-max]
+    - [Polymer-chemical-hardness, Polymer-orca-isotropic-quadrupole]
+  partner_report: [Polymer-chemical-hardness]
+  joint_tree_features: [Polymer-orca-isotropic-quadrupole, Solvent-multiwfn-ESP-max,
+                        Solvent-Mulliken-electronegativity, Polymer-chemical-hardness]
+
+cascade:
+  class_edges: [-3.0, -2.0]     # solvation classes: < -3, -3 to -2, > -2 eV
